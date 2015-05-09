@@ -1,3 +1,5 @@
+[![Build Status](https://semaphoreci.com/api/v1/projects/ffe46dce-3a53-4a4a-bbda-b33d7ba4c3ea/420135/badge.svg)](https://semaphoreci.com/landry/shellhub)      
+
 # Code snippet aplikacija
 
 ## Ukratko
