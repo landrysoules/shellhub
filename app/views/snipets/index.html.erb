@@ -1,8 +1,14 @@
-<ul>
+<div class="container">
     <% @snipets.each do |snipet| %>
-        <li>
-            <%= snipet.title %><br/>
-            <%= snipet.content %>
-        </li>
+        <div class="row">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><%= snipet.title %></h3>
+                </div>
+                <div class="panel-body">
+                    <%= snipet.content %>
+                </div>
+            </div>
+            </div>
     <% end %>
-</ul>
+</div>
