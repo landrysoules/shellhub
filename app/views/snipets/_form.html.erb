@@ -1,0 +1,54 @@
+<div class="col-md-4 col-md-offset-4">
+<%= form_for @snipet, :html => { :class => "form-horizontal snipet" } do |f| %>
+
+    <% if @snipet.errors.any? %>
+    <div id="error_expl" class="panel panel-danger">
+      <div class="panel-heading">
+        <h3 class="panel-title"><%= pluralize(@snipet.errors.count, "error") %> prohibited this snipet from being saved:</h3>
+      </div>
+      <div class="panel-body">
+        <ul>
+        <% @snipet.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+  <div class="control-group">
+    <%= f.label :user_id, :class => 'control-label' %>
+    <div class="controls">
+      <%#= f.text_field :user_id, :class => 'form-control' %>
+      <%= current_user.username %>
+    </div>
+    <%= error_span(@snipet[:user_id]) %>
+  </div>
+  <div class="control-group">
+    <%= f.label :title, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :title, :class => 'form-control' %>
+    </div>
+    <%= error_span(@snipet[:title]) %>
+  </div>
+  <div class="control-group">
+    <%= f.label :content, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :content, :class => 'form-control' %>
+    </div>
+    <%= error_span(@snipet[:content]) %>
+  </div>
+  <div class="control-group">
+    <%= f.label :execution_output, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :execution_output, :class => 'form-control' %>
+    </div>
+    <%= error_span(@snipet[:execution_output]) %>
+  </div>
+  <div class="row">&nbsp;</div>
+
+  <%= f.submit nil, :class => 'btn btn-primary' %>
+  <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+            snipets_path, :class => 'btn btn-default' %>
+
+<% end %>
+</div>

@@ -25,6 +25,9 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 gem 'twitter-bootstrap-rails'
 
+# See if it's usefull: I don't think so since the ajax requests come from the browser and not from rails
+# gem 'rack-cors', :require => 'rack/cors'
+
 gem 'devise'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
