@@ -24,19 +24,20 @@
 <%= link_to t('.back', :default => t("helpers.links.back")),
               snipets_path, :class => 'btn btn-default'  %>
 <%= link_to t('.edit', :default => t("helpers.links.edit")),
-              edit_snipet_path(@snipet), :class => 'btn btn-default' %>
+              edit_snipet_path(@snipet), :class => 'btn btn-default' if  user_signed_in? && current_user.id == @snipet.user_id%>
 <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
               snipet_path(@snipet),
               :method => 'delete',
               :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
-              :class => 'btn btn-danger' %>
-          <button class="btn btn-success" id="launchSnipet">execute command</button>
+              :class => 'btn btn-danger' if  user_signed_in? && current_user.id == @snipet.user_id%>
+          <% if  user_signed_in? && current_user.id == @snipet.user_id %>    <button class="btn btn-success" id="launchSnipet">execute command</button><% end %>
 </div>
 </div>
 <script>
 $(document).ready(function() {
     $('#launchSnipet').click(function() {
         var instruction = "<%= @snipet.content %>" ;
+        var snipetId = <%= @snipet.id %> ;
         $.post("https://shellhub-api.herokuapp.com/run",JSON.stringify({command : instruction})).
         done(function(data) {
             var str="";
@@ -44,7 +45,9 @@ $(document).ready(function() {
                 str = str + line + "<br/>";
                 });
             $("#execution-output").html(str);
+            $.post("/save_output", {id: snipetId, output: str});
         });
     });
+
 });
 </script>

@@ -37,13 +37,15 @@
     </div>
     <%= error_span(@snipet[:content]) %>
   </div>
-  <div class="control-group">
-    <%= f.label :execution_output, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :execution_output, :class => 'form-control' %>
-    </div>
-    <%= error_span(@snipet[:execution_output]) %>
-  </div>
+  <% if action_name != "new" %>
+      <div class="control-group">
+        <%= f.label :execution_output, :class => 'control-label' %>
+        <div class="controls">
+          <%= f.text_field :execution_output, :class => 'form-control' %>
+        </div>
+        <%= error_span(@snipet[:execution_output]) %>
+      </div>
+  <% end %>
   <div class="row">&nbsp;</div>
 
   <%= f.submit nil, :class => 'btn btn-primary' %>

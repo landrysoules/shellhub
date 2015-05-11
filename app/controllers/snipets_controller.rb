@@ -7,6 +7,11 @@ class SnipetsController < ApplicationController
     @snipets = Snipet.all
   end
 
+  def my_snipets
+    @snipets = Snipet.where(user_id: current_user.id)
+    render "snipets/index"
+  end
+
   # GET /snipets/1
   # GET /snipets/1.json
   def show
@@ -20,6 +25,15 @@ class SnipetsController < ApplicationController
     @snipet = Snipet.new
   end
 
+  def save_execution_output
+    snipet = Snipet.find params[:id]
+    snipet.execution_output = params[:output]
+    snipet.save
+    flash[:success] = "Snipet successfully saved."
+    @snipets = Snipet.all
+    render "snipets/index"
+  end
+
   # GET /snipets/1/edit
   def edit
   end
@@ -29,7 +43,7 @@ class SnipetsController < ApplicationController
   def create
     @snipet = Snipet.new(snipet_params)
     @snipet.user_id = current_user.id
-
+    @snipet.username = current_user.username
     respond_to do |format|
       if @snipet.save
         format.html { redirect_to @snipet, notice: 'Snipet was successfully created.' }
