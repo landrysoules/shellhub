@@ -19,7 +19,7 @@
     <%= f.label :user_id, :class => 'control-label' %>
     <div class="controls">
       <%#= f.text_field :user_id, :class => 'form-control' %>
-      <%= current_user.username %>
+      <%= user_signed_in? ? current_user.username : ""%>
     </div>
     <%= error_span(@snipet[:user_id]) %>
   </div>
