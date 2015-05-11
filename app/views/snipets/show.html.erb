@@ -37,7 +37,7 @@
 $(document).ready(function() {
     $('#launchSnipet').click(function() {
         var instruction = "<%= @snipet.content %>" ;
-        $.post("http://localhost:9292/run",JSON.stringify({command : instruction})).
+        $.post("https://shellhub-api.herokuapp.com/run",JSON.stringify({command : instruction})).
         done(function(data) {
             var str="";
             data.result.forEach(function(line){
