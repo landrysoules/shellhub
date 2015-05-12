@@ -13,9 +13,9 @@
   <dt><strong>author:</strong></dt>
   <dd><%= @author ? @author.username : "" %></dd>
   <dt><strong><%= model_class.human_attribute_name(:execution_output) %>:</strong></dt>
-  <dd><div class="panel panel-default">
+  <dd><div class="panel panel-default terminal">
         <div class="panel-body" id="execution-output">
-          <%= @snipet.execution_output %>
+          <%= @snipet.execution_output.html_safe %>
         </div>
     </div>
   </dd>

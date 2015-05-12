@@ -37,7 +37,7 @@
     </div>
     <%= error_span(@snipet[:content]) %>
   </div>
-  <% if action_name != "new" %>
+  <% if action_name != "new" && action_name != "edit" %>
       <div class="control-group">
         <%= f.label :execution_output, :class => 'control-label' %>
         <div class="controls">

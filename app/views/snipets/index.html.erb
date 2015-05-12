@@ -28,9 +28,9 @@
             <div class="panel-footer">
                   <%= link_to "show", snipet_path(snipet), class: "btn btn-primary" %>
                   <%= link_to  "edit", edit_snipet_path(snipet), class: "btn btn-primary" if  user_signed_in? && current_user.id == snipet.user_id %>
+                  <%= link_to  "delete", snipet_path(snipet), method: "delete", data: {confirm: "Are you sure ?"}, class: "btn btn-danger" if  user_signed_in? && current_user.id == snipet.user_id %>
             </div>
         </div>
     </div>
 <% end %>
 </div>
-
