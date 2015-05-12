@@ -15,7 +15,7 @@
   <dt><strong><%= model_class.human_attribute_name(:execution_output) %>:</strong></dt>
   <dd><div class="panel panel-default terminal">
         <div class="panel-body" id="execution-output">
-          <%= @snipet.execution_output.html_safe %>
+          <%= raw @snipet.execution_output %>
         </div>
     </div>
   </dd>
