@@ -1,5 +1,7 @@
 class SnipetsController < ApplicationController
+  # FIXME: check if set_snipet has to be executed before show
   before_action :set_snipet, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, except: [:index, :show]
 
   # GET /snipets
   # GET /snipets.json
@@ -46,11 +48,9 @@ class SnipetsController < ApplicationController
     @snipet.username = current_user.username
     respond_to do |format|
       if @snipet.save
-        format.html { redirect_to @snipet, notice: 'Snipet was successfully created.' }
-        format.json { render :show, status: :created, location: @snipet }
+        format.html { redirect_to my_snipets_url(current_user.id), notice: 'Snipet was successfully created.' }
       else
         format.html { render :new }
-        format.json { render json: @snipet.errors, status: :unprocessable_entity }
       end
     end
   end

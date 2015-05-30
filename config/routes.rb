@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'snipets#index'
 
-  get 'mysnipets' => 'snipets#my_snipets', as: :my_snipets
+  get 'users/:id/snipets' => 'snipets#my_snipets', :as => :my_snipets
 
   post 'save_output' => 'snipets#save_execution_output'
   # Example of regular route:
