@@ -1,8 +1,23 @@
 require 'rails_helper'
 
-RSpec.describe Snipet, type: :model do
-  it { is_expected.to validate_presence_of(:title)}
-  it { is_expected.to validate_length_of(:title).is_at_least(2)}
-  it { is_expected.to validate_presence_of(:content)}
-  it { is_expected.to validate_length_of(:content).is_at_least(2)}
+describe Snipet do
+  it 'has a valid factory' do
+    expect(create(:snipet)).to be_valid
+  end
+
+  it 'is invalid without a title' do
+    expect(build(:snipet, title: nil)).not_to be_valid
+  end
+
+  it 'is invalid if title length < 2' do
+    expect(build(:snipet, title: 'a')).not_to be_valid
+  end
+
+  it 'is invalid without a content' do
+    expect(build(:snipet, content: nil)).not_to be_valid
+  end
+
+  it 'is invalid if content length < 2' do
+    expect(build(:snipet, content: 'a')).not_to be_valid
+  end
 end

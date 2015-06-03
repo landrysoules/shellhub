@@ -3,8 +3,8 @@
 
 module Helpers
   def signup(user)
-    visit "/users/sign_out"
-    visit "/users/sign_up"
+    visit destroy_user_session_path
+    visit new_user_registration_path
     fill_in "user_email", :with => user.email
     fill_in "user_password", :with => user.password
     fill_in "user_username", :with => user.username
@@ -12,8 +12,8 @@ module Helpers
   end
 
   def authenticate(user)
-    visit "/users/sign_out"
-    visit "/users/sign_in"
+    visit destroy_user_session_path
+    visit new_user_session_path
     fill_in "user_email", :with => user.email
     fill_in "user_password", :with => user.password
     click_button "submit_signin"

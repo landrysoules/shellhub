@@ -18,6 +18,7 @@
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 require_relative 'support/controller_helpers.rb'
 require 'devise'
+require 'factory_girl'
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
@@ -87,4 +88,7 @@ RSpec.configure do |config|
   # as the one that triggered the failure.
   Kernel.srand config.seed
 =end
+
+  config.include FactoryGirl::Syntax::Methods
+
 end
