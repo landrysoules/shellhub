@@ -18,7 +18,7 @@ require 'rails_helper'
 # Message expectations are only used when there is no simpler way to specify
 # that an instance is receiving a specific message.
 
-RSpec.describe SnipetsController, type: :controller do
+RSpec.describe SnipetsController do
 
   # This should return the minimal set of attributes required to create a valid
   # Snipet. As you add validations to Snipet, be sure to
@@ -37,12 +37,12 @@ RSpec.describe SnipetsController, type: :controller do
   # in order to pass any filters (e.g. authentication) defined in
   # SnipetsController. Be sure to keep this updated too.
   # let(:valid_session) { {"warden.user.user.key" => session["warden.user.user.key"]} }
-  let(:valid_session) {  }
+  # This doesn't seem to apply to Devise (didn't know what to put in :valid_session), so I use Devise's signin helper method.
 
   describe "GET #index" do
     it "assigns all snipets as @snipets" do
       snipet = Snipet.create! valid_attributes
-      get :index, {}, valid_session
+      get :index, {}
       expect(assigns(:snipets)).to eq([snipet])
     end
   end
@@ -50,58 +50,61 @@ RSpec.describe SnipetsController, type: :controller do
   describe "GET #show" do
     it "assigns the requested snipet as @snipet" do
       snipet = Snipet.create! valid_attributes
-      get :show, {:id => snipet.to_param}, valid_session
+      get :show, {:id => snipet.to_param}
       expect(assigns(:snipet)).to eq(snipet)
     end
   end
 
   describe "GET #new" do
     it "assigns a new snipet as @snipet" do
-      get :new, {}, valid_session
+      #sign_in  User.new(email: 'landry@spaceinvade.rs', password: '123456', username: 'landry')
+      sign_in build(:user)
+      get :new, {}
       expect(assigns(:snipet)).to be_a_new(Snipet)
     end
   end
 
   describe "GET #edit" do
     it "assigns the requested snipet as @snipet" do
+      sign_in build(:user)
       snipet = Snipet.create! valid_attributes
-      get :edit, {:id => snipet.to_param}, valid_session
+      get :edit, {:id => snipet.to_param}
       expect(assigns(:snipet)).to eq(snipet)
     end
   end
 
-  #describe "POST #create" do
-    #context "with valid params" do
-      #it "creates a new Snipet" do
-        #expect {
-          #post :create, {:snipet => valid_attributes}, valid_session
-        #}.to change(Snipet, :count).by(1)
-      #end
+  describe "POST #create" do
+    context "with valid params" do
+      it "creates a new Snipet" do
+        sign_in create(:user)
+        expect {
+          post :create, {:snipet => valid_attributes}
+        }.to change(Snipet, :count).by(1)
+      end
 
-      #it "assigns a newly created snipet as @snipet" do
-        #post :create, {:snipet => valid_attributes}, valid_session
-        #expect(assigns(:snipet)).to be_a(Snipet)
-        #expect(assigns(:snipet)).to be_persisted
-      #end
+      it "assigns a newly created snipet as @snipet" do
+        sign_in create(:user)
+        post :create, {:snipet => valid_attributes}
+        expect(assigns(:snipet)).to be_a(Snipet)
+        expect(assigns(:snipet)).to be_persisted
+      end
 
-      #it "redirects to the created snipet" do
-        #post :create, {:snipet => valid_attributes}, valid_session
-        #expect(response).to redirect_to(Snipet.last)
-      #end
-    #end
+    end
 
-    #context "with invalid params" do
-      #it "assigns a newly created but unsaved snipet as @snipet" do
-        #post :create, {:snipet => invalid_attributes}, valid_session
-        #expect(assigns(:snipet)).to be_a_new(Snipet)
-      #end
+    context "with invalid params" do
+      it "assigns a newly created but unsaved snipet as @snipet" do
+        sign_in create(:user)
+        post :create, {:snipet => invalid_attributes}
+        expect(assigns(:snipet)).to be_a_new(Snipet)
+      end
 
-      #it "re-renders the 'new' template" do
-        #post :create, {:snipet => invalid_attributes}, valid_session
-        #expect(response).to render_template("new")
-      #end
-    #end
-  #end
+      it "re-renders the 'new' template" do
+        sign_in create(:user)
+        post :create, {:snipet => invalid_attributes}
+        expect(response).to render_template("new")
+      end
+    end
+  end
 
   describe "PUT #update" do
     context "with valid params" do
@@ -111,35 +114,40 @@ RSpec.describe SnipetsController, type: :controller do
       }
 
       it "updates the requested snipet" do
+        sign_in build(:user)
         snipet = Snipet.create! valid_attributes
-        put :update, {:id => snipet.to_param, :snipet => new_attributes}, valid_session
+        put :update, {:id => snipet.to_param, :snipet => new_attributes}, :format => :html
         snipet.reload
         skip("Add assertions for updated state")
       end
 
       it "assigns the requested snipet as @snipet" do
+        sign_in build(:user)
         snipet = Snipet.create! valid_attributes
-        put :update, {:id => snipet.to_param, :snipet => valid_attributes}, valid_session
+        put :update, {:id => snipet.to_param, :snipet => valid_attributes}
         expect(assigns(:snipet)).to eq(snipet)
       end
 
       it "redirects to the snipet" do
+        sign_in build(:user)
         snipet = Snipet.create! valid_attributes
-        put :update, {:id => snipet.to_param, :snipet => valid_attributes}, valid_session
+        put :update, {:id => snipet.to_param, :snipet => valid_attributes}
         expect(response).to redirect_to(snipet)
       end
     end
 
     context "with invalid params" do
       it "assigns the snipet as @snipet" do
+        sign_in build(:user)
         snipet = Snipet.create! valid_attributes
-        put :update, {:id => snipet.to_param, :snipet => invalid_attributes}, valid_session
+        put :update, {:id => snipet.to_param, :snipet => invalid_attributes}
         expect(assigns(:snipet)).to eq(snipet)
       end
 
       it "re-renders the 'edit' template" do
+        sign_in build(:user)
         snipet = Snipet.create! valid_attributes
-        put :update, {:id => snipet.to_param, :snipet => invalid_attributes}, valid_session
+        put :update, {:id => snipet.to_param, :snipet => invalid_attributes}
         expect(response).to render_template("edit")
       end
     end
@@ -147,16 +155,18 @@ RSpec.describe SnipetsController, type: :controller do
 
   describe "DELETE #destroy" do
     it "destroys the requested snipet" do
+      sign_in build(:user)
       snipet = Snipet.create! valid_attributes
       expect {
-        delete :destroy, {:id => snipet.to_param}, valid_session
+        delete :destroy, {:id => snipet.to_param}
       }.to change(Snipet, :count).by(-1)
     end
 
     it "redirects to the snipets list" do
+      sign_in build(:user)
       snipet = Snipet.create! valid_attributes
-      delete :destroy, {:id => snipet.to_param}, valid_session
-      expect(response).to redirect_to(snipets_url)
+      delete :destroy, {:id => snipet.to_param}
+      expect(response).to redirect_to(snipets_path)
     end
   end
 

@@ -52,6 +52,9 @@ group :development, :test do
   
   gem 'factory_girl_rails'
 
+  #usefull to show the page capybara is actually seeing: use with save_and_open_page in step definition:
+  gem 'launchy'
+
 end
 
 group :test do

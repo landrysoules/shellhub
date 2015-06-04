@@ -1,8 +1,9 @@
 class SnipetsController < ApplicationController
+  # FIXME: check if set_snipet has to be executed before show
   before_action :set_snipet, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, except: [:index, :show]
 
   # GET /snipets
-  # GET /snipets.json
   def index
     @snipets = Snipet.all
   end
@@ -13,7 +14,6 @@ class SnipetsController < ApplicationController
   end
 
   # GET /snipets/1
-  # GET /snipets/1.json
   def show
     if @snipet.user_id
       @author = User.find(@snipet.user_id)
@@ -31,7 +31,6 @@ class SnipetsController < ApplicationController
     snipet.save
     flash[:success] = "Snipet successfully saved."
     @snipets = Snipet.all
-    render "snipets/index"
   end
 
   # GET /snipets/1/edit
@@ -39,44 +38,30 @@ class SnipetsController < ApplicationController
   end
 
   # POST /snipets
-  # POST /snipets.json
   def create
     @snipet = Snipet.new(snipet_params)
     @snipet.user_id = current_user.id
     @snipet.username = current_user.username
-    respond_to do |format|
-      if @snipet.save
-        format.html { redirect_to @snipet, notice: 'Snipet was successfully created.' }
-        format.json { render :show, status: :created, location: @snipet }
-      else
-        format.html { render :new }
-        format.json { render json: @snipet.errors, status: :unprocessable_entity }
-      end
+    if @snipet.save
+      redirect_to({action: "my_snipets", id: current_user.id}, notice: 'Snipet was successfully created.')
+    else
+      render :new 
     end
   end
 
   # PATCH/PUT /snipets/1
-  # PATCH/PUT /snipets/1.json
   def update
-    respond_to do |format|
-      if @snipet.update(snipet_params)
-        format.html { redirect_to @snipet, notice: 'Snipet was successfully updated.' }
-        format.json { render :show, status: :ok, location: @snipet }
-      else
-        format.html { render :edit }
-        format.json { render json: @snipet.errors, status: :unprocessable_entity }
-      end
+    if @snipet.update(snipet_params)
+      redirect_to @snipet, notice: 'Snipet was successfully updated.'
+    else
+      render :edit
     end
   end
 
   # DELETE /snipets/1
-  # DELETE /snipets/1.json
   def destroy
     @snipet.destroy
-    respond_to do |format|
-      format.html { redirect_to snipets_url, notice: 'Snipet was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    redirect_to snipets_url, notice: 'Snipet was successfully destroyed.' 
   end
 
   private
