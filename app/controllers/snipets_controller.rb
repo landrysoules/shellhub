@@ -10,8 +10,7 @@ class SnipetsController < ApplicationController
 
   def my_snipets
     @snipets = Snipet.where(user_id: current_user.id)
-    #render "snipets/index"
-    #render @snipets
+    render "snipets/index"
   end
 
   # GET /snipets/1
@@ -32,8 +31,6 @@ class SnipetsController < ApplicationController
     snipet.save
     flash[:success] = "Snipet successfully saved."
     @snipets = Snipet.all
-    #render "snipets/index"
-    #render @snipets
   end
 
   # GET /snipets/1/edit
@@ -45,32 +42,26 @@ class SnipetsController < ApplicationController
     @snipet = Snipet.new(snipet_params)
     @snipet.user_id = current_user.id
     @snipet.username = current_user.username
-    respond_to do
-      if @snipet.save
-        redirect_to my_snipets_url(current_user.id), notice: 'Snipet was successfully created.' 
-      else
-        render :new 
-      end
+    if @snipet.save
+      redirect_to({action: "my_snipets", id: current_user.id}, notice: 'Snipet was successfully created.')
+    else
+      render :new 
     end
   end
 
   # PATCH/PUT /snipets/1
   def update
-    respond_to do
-      if @snipet.update(snipet_params)
-        redirect_to @snipet, notice: 'Snipet was successfully updated.'
-      else
-        render :edit
-      end
+    if @snipet.update(snipet_params)
+      redirect_to @snipet, notice: 'Snipet was successfully updated.'
+    else
+      render :edit
     end
   end
 
   # DELETE /snipets/1
   def destroy
     @snipet.destroy
-    respond_to do |format|
-      redirect_to snipets_url, notice: 'Snipet was successfully destroyed.' 
-    end
+    redirect_to snipets_url, notice: 'Snipet was successfully destroyed.' 
   end
 
   private

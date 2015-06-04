@@ -73,38 +73,38 @@ RSpec.describe SnipetsController do
     end
   end
 
-  #describe "POST #create" do
-    #context "with valid params" do
-      #it "creates a new Snipet" do
-        #expect {
-          #post :create, {:snipet => valid_attributes}, valid_session
-        #}.to change(Snipet, :count).by(1)
-      #end
+  describe "POST #create" do
+    context "with valid params" do
+      it "creates a new Snipet" do
+        sign_in create(:user)
+        expect {
+          post :create, {:snipet => valid_attributes}
+        }.to change(Snipet, :count).by(1)
+      end
 
-      #it "assigns a newly created snipet as @snipet" do
-        #post :create, {:snipet => valid_attributes}, valid_session
-        #expect(assigns(:snipet)).to be_a(Snipet)
-        #expect(assigns(:snipet)).to be_persisted
-      #end
+      it "assigns a newly created snipet as @snipet" do
+        sign_in create(:user)
+        post :create, {:snipet => valid_attributes}
+        expect(assigns(:snipet)).to be_a(Snipet)
+        expect(assigns(:snipet)).to be_persisted
+      end
 
-      #it "redirects to the created snipet" do
-        #post :create, {:snipet => valid_attributes}, valid_session
-        #expect(response).to redirect_to(Snipet.last)
-      #end
-    #end
+    end
 
-    #context "with invalid params" do
-      #it "assigns a newly created but unsaved snipet as @snipet" do
-        #post :create, {:snipet => invalid_attributes}, valid_session
-        #expect(assigns(:snipet)).to be_a_new(Snipet)
-      #end
+    context "with invalid params" do
+      it "assigns a newly created but unsaved snipet as @snipet" do
+        sign_in create(:user)
+        post :create, {:snipet => invalid_attributes}
+        expect(assigns(:snipet)).to be_a_new(Snipet)
+      end
 
-      #it "re-renders the 'new' template" do
-        #post :create, {:snipet => invalid_attributes}, valid_session
-        #expect(response).to render_template("new")
-      #end
-    #end
-  #end
+      it "re-renders the 'new' template" do
+        sign_in create(:user)
+        post :create, {:snipet => invalid_attributes}
+        expect(response).to render_template("new")
+      end
+    end
+  end
 
   describe "PUT #update" do
     context "with valid params" do
@@ -116,7 +116,7 @@ RSpec.describe SnipetsController do
       it "updates the requested snipet" do
         sign_in build(:user)
         snipet = Snipet.create! valid_attributes
-        put :update, {:id => snipet.to_param, :snipet => new_attributes}
+        put :update, {:id => snipet.to_param, :snipet => new_attributes}, :format => :html
         snipet.reload
         skip("Add assertions for updated state")
       end
