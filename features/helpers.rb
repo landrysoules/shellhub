@@ -18,6 +18,10 @@ module Helpers
     fill_in "user_password", :with => user.password
     click_button "submit_signin"
   end
+
+  def create_snippet
+    FactoryGirl.create(:snipet)
+  end
 end
 
 World Helpers # Makes this module visible from all the cucumber tests

@@ -1,8 +1,7 @@
 Given(/^I am authenticated$/) do
-  # FIXME: is it possible to use factorygirl here (build(:user)) in place of User.new ?
-  user = User.new email: "landry.soules@gmail.com", password: "7ninahartley7", username: "landry"
-  signup user
-  authenticate user
+  @current_user = FactoryGirl.create(:user)
+  signup @current_user
+  authenticate @current_user
   expect(page).to have_content("Signed in successfully.")
 end
 
@@ -17,11 +16,12 @@ When(/^I fill in the snippet creation form$/) do
 end
 
 Then(/^I should see a "(.*?)" message$/) do |message_type|
-  if message_type.equal? "success"
+  case message_type
+  when "success"
     expect(page).to have_content("Snipet was successfully created.")
-  elsif message_type.equal? "update success"
+  when "update success"
     expect(page).to have_content("Snipet was successfully updated.")
-  elsif message_type.equal? "update delete"
+  when "update delete"
     expect(page).to have_content("Snipet was successfully destroyed.")
   end
 end
@@ -31,13 +31,15 @@ Then(/^I should see my snippets page$/) do
 end
 
 When(/^I go to my snippets page$/) do
-  visit new_snipet_path
-  fill_in "snipet_title", :with => "my first snippet"
-  fill_in "snipet_content", :with => "ls"
-  click_button "submit_snipet"
-
-  #FIXME: How can I get current_user id, in place of writing id ?
-  visit my_snipets_path(3)
+  #visit new_snipet_path
+  #fill_in "snipet_title", :with => "my first snippet"
+  #fill_in "snipet_content", :with => "ls"
+  #click_button "submit_snipet"
+  FactoryGirl.create(:snipet, user_id: @current_user.id, username: @current_user.username)
+  #FIXME: use association, see https://github.com/thoughtbot/factory_girl/blob/master/GETTING_STARTED.md
+  FactoryGirl.create(:snipet,  username: "jesse")
+  FactoryGirl.create(:snipet,  username: "walt")
+  visit my_snipets_path(@current_user.id)
 end
 
 When(/^I click edit on a snippet$/) do
@@ -63,15 +65,16 @@ When(/^I click ok on the confirm box$/) do
 end
 
 Given(/^I am on the home page$/) do
+  create_snippet
   visit snipets_path
 end
 
 When(/^I click show on a snippet$/) do
-  pending # express the regexp above with the code you wish you had
+  click_link "show"
 end
 
 Then(/^I should see this snippet details$/) do
-  pending # express the regexp above with the code you wish you had
+  expect(current_path).to match(/snipets\/\d+/)
 end
 
 Then(/^I should see snippets page$/) do
@@ -79,5 +82,5 @@ Then(/^I should see snippets page$/) do
 end
 
 Then(/^I should see only my snippets$/) do
-  pending # express the regexp above with the code you wish you had
+  pending #save_and_open_page
 end
