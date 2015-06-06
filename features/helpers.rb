@@ -22,6 +22,14 @@ module Helpers
   def create_snippet
     FactoryGirl.create(:snipet)
   end
+
+  def create_snippets
+    snipets = FactoryGirl.create_list(:snipet,10)
+    #snipets.each do |snipet|
+    #puts snipet.inspect
+    #puts snipet.user.inspect
+    #end
+  end
 end
 
 World Helpers # Makes this module visible from all the cucumber tests

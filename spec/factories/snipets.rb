@@ -2,6 +2,7 @@ FactoryGirl.define do
   factory :snipet do
     title "My first snipet"
     content "ls ~"
-    execution_output "dummy output"
+    execution_output "MyString"
+    user
   end
 end
