@@ -30,6 +30,13 @@ module Helpers
     #puts snipet.user.inspect
     #end
   end
+  
+  def call_web_service
+    VCR.use_cassette "sinatra_cassette" do
+      HTTParty.post('https://shellhub-api.herokuapp.com/run', body:{command:'pwd'}.to_json, :debug_output => $stdout).body
+    end
+  end
+
 end
 
 World Helpers # Makes this module visible from all the cucumber tests

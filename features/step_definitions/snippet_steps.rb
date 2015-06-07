@@ -91,7 +91,7 @@ When(/^I click execute$/) do
 end
 
 Then(/^I should see the command output$/) do
-  response = HTTParty.post('https://shellhub-api.herokuapp.com/run', body:{command:'pwd'}.to_json, :debug_output => $stdout).body
+  response = call_web_service # HTTParty.post('https://shellhub-api.herokuapp.com/run', body:{command:'pwd'}.to_json, :debug_output => $stdout).body
   expect(response.to_s).to match("{\"command\":\"pwd\",\"result\":[\"/app\"]}")
 end
 
