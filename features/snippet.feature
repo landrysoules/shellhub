@@ -16,13 +16,13 @@ Feature: Snippet life cycle
     And I fill in the snippet edit form
     Then I should see that my snippet is successfully updated
 
-  @javascript
-  Scenario: Deleting a snippet
-    Given I am authenticated
-    When I go to my snippets page
-    And I click delete on a snippet
-    And I click ok on the confirm box
-    Then I should see that my snippet is successfully deleted
+  #@javascript
+  #Scenario: Deleting a snippet
+    #Given I am authenticated
+    #When I go to my snippets page
+    #And I click delete on a snippet
+    #And I click ok on the confirm box
+    #Then I should see that my snippet is successfully deleted
 
   Scenario: Displaying a snippet
     Given I am on the home page
@@ -41,7 +41,7 @@ Feature: Snippet life cycle
 
   Scenario: Running a snippet
     Given I am an anonymous user
-    When I go to a snippet page
+    When I click show on a snippet
     When I click execute
     Then I should see the command output
 

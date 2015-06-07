@@ -43,6 +43,7 @@ Given(/^I am on the home page$/) do
 end
 
 When(/^I click show on a snippet$/) do
+  visit snipets_path
   first(".btn").click
 end
 
@@ -85,15 +86,12 @@ Given(/^several registered users have already created snipets$/) do
   create_snippets
 end
 
-When(/^I go to a snippet page$/) do
-  pending # express the regexp above with the code you wish you had
-end
-
 When(/^I click execute$/) do
-  pending # express the regexp above with the code you wish you had
+  click_button 'launchSnipet'
 end
 
 Then(/^I should see the command output$/) do
-  pending # express the regexp above with the code you wish you had
+  response = HTTParty.post('https://shellhub-api.herokuapp.com/run', body:{command:'pwd'}.to_json, :debug_output => $stdout).body
+  expect(response.to_s).to match("{\"command\":\"pwd\",\"result\":[\"/app\"]}")
 end
 
