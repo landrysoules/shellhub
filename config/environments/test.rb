@@ -39,4 +39,13 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+  
+  # VCR configuration
+  VCR.configure do |c|
+    c.cassette_library_dir = 'fixtures/vcr_cassettes'
+    c.hook_into :webmock
+    # allow_http_connections_when_no_cassete: allows http request when not using any cassete
+    c.allow_http_connections_when_no_cassette = true 
+  end
+
 end

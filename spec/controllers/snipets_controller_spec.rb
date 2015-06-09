@@ -18,7 +18,7 @@ require 'rails_helper'
 # Message expectations are only used when there is no simpler way to specify
 # that an instance is receiving a specific message.
 
-RSpec.describe SnipetsController do
+describe SnipetsController do
 
   # This should return the minimal set of attributes required to create a valid
   # Snipet. As you add validations to Snipet, be sure to
@@ -118,7 +118,8 @@ RSpec.describe SnipetsController do
         snipet = Snipet.create! valid_attributes
         put :update, {:id => snipet.to_param, :snipet => new_attributes}, :format => :html
         snipet.reload
-        skip("Add assertions for updated state")
+        puts new_attributes
+        expect(snipet.title).to eq("updated title")
       end
 
       it "assigns the requested snipet as @snipet" do
