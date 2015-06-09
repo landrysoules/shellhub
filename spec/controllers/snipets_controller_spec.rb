@@ -24,7 +24,7 @@ describe SnipetsController do
   # Snipet. As you add validations to Snipet, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-   # skip("Add a hash of attributes valid for your model")
+    # skip("Add a hash of attributes valid for your model")
     {:title => "My snipet",  :content => "ls"}
   }
 
@@ -39,11 +39,22 @@ describe SnipetsController do
   # let(:valid_session) { {"warden.user.user.key" => session["warden.user.user.key"]} }
   # This doesn't seem to apply to Devise (didn't know what to put in :valid_session), so I use Devise's signin helper method.
 
+  # Don't know how to use a mock object here: index is supposed to retrieve all snippets from database.
   describe "GET #index" do
-    it "assigns all snipets as @snipets" do
-      snipet = Snipet.create! valid_attributes
+    it "returns all snippets" do
+      all_snippets = build_list(:snipet, 10)
+      allow(Snipet).to receive(:all).and_return(all_snippets)
       get :index, {}
-      expect(assigns(:snipets)).to eq([snipet])
+      expect(assigns(:snipets)).to eq(all_snippets)
+    end
+  end
+
+  describe "GET my_snipets" do
+    it "returns only current user's snippets" do
+      my_snippets = create(:snipet)
+      allow(Snipet).to receive(:where).and_return(my_snippets)
+      get :my_snipets, {:id => 1}
+      expect(assigns(:snipets)).to eq(my_snippets)
     end
   end
 
