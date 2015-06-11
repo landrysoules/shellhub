@@ -20,38 +20,64 @@ require 'rails_helper'
 
 describe SnipetsController do
 
-  # This should return the minimal set of attributes required to create a valid
-  # Snipet. As you add validations to Snipet, be sure to
-  # adjust the attributes here as well.
-  let(:valid_attributes) {
-    # skip("Add a hash of attributes valid for your model")
-    {:title => "My snipet",  :content => "ls"}
+  let(:current_user){
+    current_user = build_stubbed(:user)
   }
 
-  let(:invalid_attributes) {
-    #skip("Add a hash of attributes invalid for your model")
-    { title: "a", content: "b"}
+  let(:generic_snippet){
+    generic_snippet = build_stubbed(:snipet)
   }
 
-  # This should return the minimal set of values that should be in the session
-  # in order to pass any filters (e.g. authentication) defined in
-  # SnipetsController. Be sure to keep this updated too.
-  # let(:valid_session) { {"warden.user.user.key" => session["warden.user.user.key"]} }
-  # This doesn't seem to apply to Devise (didn't know what to put in :valid_session), so I use Devise's signin helper method.
-
-  # Don't know how to use a mock object here: index is supposed to retrieve all snippets from database.
+  before{
+    allow(Snipet).to receive(:find).and_return(generic_snippet)
+  }
+  
   describe "GET #index" do
-    it "returns all snippets" do
+    let(:all_snippets){
       all_snippets = build_list(:snipet, 10)
+    }
+    before{
       allow(Snipet).to receive(:all).and_return(all_snippets)
+    }
+    it "assigns all snippets as @snipets" do
       get :index, {}
       expect(assigns(:snipets)).to eq(all_snippets)
     end
+
+    it "renders index template" do
+      expect(get :index, {}).to render_template(:index)
+    end
   end
 
+  # Can't figure out why this test fails!!??
+  describe "GET #my_snipets" do
+    let(:my_snippets){my_snippets = build_list(:snipet, 10)}
+    before{allow(Snipet).to receive(:where).and_return(my_snippets)}
+    it "assigns my snippets as @snipets" do 
+      get :my_snipets, {:id => current_user.id}
+      expect(assigns(:snipets)).to eq(my_snippets)
+    end
+
+    # I don't understand why it fails ;-(
+    it "renders index template" do
+      expect(get :my_snipets, {:id => current_user.id}).to render_template(:index)
+    end
+  end
+
+  describe "GET #edit" do
+    it "assigns given snippet as @snipet" do
+      get :edit, {:id => generic_snippet.id}
+      expect(assigns(:snipet)).to eq(generic_snippet)
+    end
+    it "renders edit template" do
+     expect(get :edit, {:id => generic_snippet.id}).to render_template(:edit)
+    end
+  end
+
+  # Can't figure out why this test fails!!??
   describe "GET my_snipets" do
     it "returns only current user's snippets" do
-      my_snippets = create(:snipet)
+      my_snippets = build_stubbed(:snipet)
       allow(Snipet).to receive(:where).and_return(my_snippets)
       get :my_snipets, {:id => 1}
       expect(assigns(:snipets)).to eq(my_snippets)
@@ -59,27 +85,30 @@ describe SnipetsController do
   end
 
   describe "GET #show" do
-    it "assigns the requested snipet as @snipet" do
-      snipet = Snipet.create! valid_attributes
-      get :show, {:id => snipet.to_param}
+    it "shows requested snippet" do
+      snipet = build_stubbed(:snipet)
+      allow(Snipet).to receive(:find).and_return(snipet)
+      allow(User).to receive(:find).and_return(snipet.user_id)
+      get :show, {:id => 1}
       expect(assigns(:snipet)).to eq(snipet)
     end
   end
 
   describe "GET #new" do
     it "assigns a new snipet as @snipet" do
-      #sign_in  User.new(email: 'landry@spaceinvade.rs', password: '123456', username: 'landry')
-      sign_in build(:user)
+      #sign_in build_stubbed(:user)
       get :new, {}
       expect(assigns(:snipet)).to be_a_new(Snipet)
     end
   end
 
   describe "GET #edit" do
-    it "assigns the requested snipet as @snipet" do
-      sign_in build(:user)
-      snipet = Snipet.create! valid_attributes
-      get :edit, {:id => snipet.to_param}
+    it "displays requested snippet for editing" do
+      sign_in build_stubbed(:user)
+      snipet = build_stubbed(:snipet)
+      snipet.id = 1
+      allow(Snipet).to receive(:find).and_return(snipet)
+      get :edit, {:id => snipet.id}
       expect(assigns(:snipet)).to eq(snipet)
     end
   end
@@ -87,31 +116,30 @@ describe SnipetsController do
   describe "POST #create" do
     context "with valid params" do
       it "creates a new Snipet" do
-        sign_in create(:user)
-        expect {
-          post :create, {:snipet => valid_attributes}
-        }.to change(Snipet, :count).by(1)
-      end
-
-      it "assigns a newly created snipet as @snipet" do
-        sign_in create(:user)
-        post :create, {:snipet => valid_attributes}
-        expect(assigns(:snipet)).to be_a(Snipet)
-        expect(assigns(:snipet)).to be_persisted
+        snippet = build_stubbed(:snipet)
+        snippet.id = nil
+        allow(snippet).to receive(:save).and_return(snippet)
+        allow(Snipet).to receive(:new).and_return(snippet)
+        user = build_stubbed(:user)
+        sign_in user
+          # IMPORTANT: if you don't send snippet's attributes to the controller, it will just receive snippet's id !!
+        post :create, {:snipet => snippet.attributes}
+        expect(assigns(:snipet)).to eq(snippet)
+        expect(response).to redirect_to({:action => "my_snipets", :id => user.id})
       end
 
     end
 
     context "with invalid params" do
       it "assigns a newly created but unsaved snipet as @snipet" do
-        sign_in create(:user)
-        post :create, {:snipet => invalid_attributes}
+        sign_in build_stubbed(:user)
+        post :create, {:snipet => build_stubbed(:snipet_invalid).attributes}
         expect(assigns(:snipet)).to be_a_new(Snipet)
       end
 
       it "re-renders the 'new' template" do
-        sign_in create(:user)
-        post :create, {:snipet => invalid_attributes}
+        sign_in build_stubbed(:user)
+        post :create, {:snipet => build_stubbed(:snipet_invalid).attributes}
         expect(response).to render_template("new")
       end
     end
@@ -119,64 +147,64 @@ describe SnipetsController do
 
   describe "PUT #update" do
     context "with valid params" do
-      let(:new_attributes) {
-        # skip("Add a hash of attributes valid for your model")
-        {title: "updated title", content: "ls -lrht"}
+      before {
+        @update_user = build_stubbed(:user)
+        @update_snippet = build_stubbed(:snipet)
+        @create_snippet = build_stubbed(:snipet)
+        allow(@create_snippet).to receive(:save).and_return(@create_snippet)
+        allow(@update_snippet).to receive(:reload).and_return(@update_snippet)
+        allow(@update_snippet).to receive(:reload).and_return(@update_snippet)
+        allow(Snipet).to receive(:find).and_return(@update_snippet)
+        allow(Snipet).to receive(:new).and_return(@create_snippet)
+        allow(Snipet).to receive(:save).and_return(@create_snippet)
       }
-
       it "updates the requested snipet" do
-        sign_in build(:user)
-        snipet = Snipet.create! valid_attributes
-        put :update, {:id => snipet.to_param, :snipet => new_attributes}, :format => :html
-        snipet.reload
-        puts new_attributes
-        expect(snipet.title).to eq("updated title")
+        sign_in @update_user
+        post :create, {:snipet => @create_snippet.attributes}
+        put :update, {:id => @update_snippet.id, :snipet => @update_snippet.attributes}, :format => :html
+        @update_snippet.reload
+        expect(@update_snippet.title).to eq("updated title")
       end
 
       it "assigns the requested snipet as @snipet" do
-        sign_in build(:user)
-        snipet = Snipet.create! valid_attributes
-        put :update, {:id => snipet.to_param, :snipet => valid_attributes}
+        sign_in build_stubbed(:user)
+        snipet = build_stubbed(:snipet)
+        put :update, {:id => snipet.to_param, :snipet => snipet}
         expect(assigns(:snipet)).to eq(snipet)
       end
 
       it "redirects to the snipet" do
-        sign_in build(:user)
-        snipet = Snipet.create! valid_attributes
-        put :update, {:id => snipet.to_param, :snipet => valid_attributes}
+        sign_in build_stubbed(:user)
+        snipet = build_stubbed(:snipet)
+        put :update, {:id => snipet.to_param, :snipet => snipet}
         expect(response).to redirect_to(snipet)
       end
     end
 
     context "with invalid params" do
       it "assigns the snipet as @snipet" do
-        sign_in build(:user)
-        snipet = Snipet.create! valid_attributes
-        put :update, {:id => snipet.to_param, :snipet => invalid_attributes}
+        sign_in build_stubbed(:user)
+        snipet = build_stubbed(:snipet)
+        put :update, {:id => snipet.to_param, :snipet => build_stubbed(:snipet_invalid)}
         expect(assigns(:snipet)).to eq(snipet)
       end
 
       it "re-renders the 'edit' template" do
-        sign_in build(:user)
-        snipet = Snipet.create! valid_attributes
-        put :update, {:id => snipet.to_param, :snipet => invalid_attributes}
+        sign_in build_stubbed(:user)
+        snipet = build_stubbed(:snipet)
+        put :update, {:id => snipet.to_param, :snipet => build_stubbed(:snipet_invalid)}
         expect(response).to render_template("edit")
       end
     end
   end
 
   describe "DELETE #destroy" do
-    it "destroys the requested snipet" do
-      sign_in build(:user)
-      snipet = Snipet.create! valid_attributes
-      expect {
-        delete :destroy, {:id => snipet.to_param}
-      }.to change(Snipet, :count).by(-1)
-    end
 
     it "redirects to the snipets list" do
-      sign_in build(:user)
-      snipet = Snipet.create! valid_attributes
+      sign_in build_stubbed(:user)
+      snipet = build_stubbed(:snipet)
+      allow(Snipet).to receive(:find).and_return(snipet)
+      allow(snipet).to receive(:destroy).and_return(nil)
       delete :destroy, {:id => snipet.to_param}
       expect(response).to redirect_to(snipets_path)
     end

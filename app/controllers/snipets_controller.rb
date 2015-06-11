@@ -10,7 +10,6 @@ class SnipetsController < ApplicationController
 
   def my_snipets
     @snipets = Snipet.where(user_id: current_user.id)
-    #puts @snipets
     #render "snipets/index"
   end
 
