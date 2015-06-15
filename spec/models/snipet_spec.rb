@@ -37,4 +37,8 @@ describe Snipet do
       expect(build(:snipet)).to belong_to(:user)
     end
   end
+
+  context "rating system" do
+    it{should have_many(:users)}
+  end
 end

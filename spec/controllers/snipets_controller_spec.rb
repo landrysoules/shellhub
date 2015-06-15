@@ -109,4 +109,13 @@ describe SnipetsController do
       end
     end
   end
+
+  describe "PUT #give_snippet_a_star" do
+    context "I didn't give the snippet a star yet" do
+
+    end
+    context "I already gave the snippet a star" do
+
+    end
+  end
 end
