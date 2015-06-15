@@ -21,3 +21,8 @@ Feature: Starring snippets
     Then I should see a "deletion" message
     And the stars counter for this snippet should decrease
     And the star icon should become grey
+
+  Scenario: Watching my starred snippets
+    Given I am anywhere in the site
+    When I click on my starred snippets
+    Then I should see all the snippets I have given a star

@@ -39,3 +39,15 @@ Then(/^the star icon should become grey$/) do
   pending # express the regexp above with the code you wish you had
 end
 
+Given(/^I am anywhere in the site$/) do
+  pending # express the regexp above with the code you wish you had
+end
+
+When(/^I click on my starred snippets$/) do
+  pending # express the regexp above with the code you wish you had
+end
+
+Then(/^I should see all the snippets I have given a star$/) do
+  pending # express the regexp above with the code you wish you had
+end
+
