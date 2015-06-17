@@ -10,14 +10,11 @@ class SnipetsController < ApplicationController
 
   def my_snipets
     @snipets = Snipet.where(user_id: current_user.id)
-    render "snipets/index"
+    render "index"
   end
 
   # GET /snipets/1
   def show
-    if @snipet.user_id
-      @author = User.find(@snipet.user_id)
-    end
   end
 
   # GET /snipets/new
@@ -67,7 +64,10 @@ class SnipetsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_snipet
-      @snipet = Snipet.find(params[:id])
+      @snipet = Snipet.find(params[:id]) || nil
+      rescue ActiveRecord::RecordNotFound
+        flash[:alert] = "No snippet found with the id " + params[:id]
+        redirect_to :action => :index
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
