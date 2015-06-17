@@ -2,10 +2,19 @@ require 'rails_helper'
 
 describe Snipet do
 
+  context "database reflects the model" do
+    it{should have_db_column(:title)}
+    it{should have_db_column(:content)}
+    it{should have_db_column(:execution_output)}
+    it{should have_db_column(:user_id)}
+    it{should have_db_column(:username)}
+  end
+
   context "valid creation" do
     it "is created with all fields correctly filled in" do
       expect(build(:snipet)).to be_valid
     end
+    it{should belong_to(:user)}
   end
   context "invalid creation" do
     it 'is invalid without a title' do
