@@ -63,7 +63,6 @@ class SnipetsController < ApplicationController
 
   def give_snippet_a_star
     star = Star.where(:user_id => current_user.id, :snipet_id => @snipet.id)
-    byebug()
     if star.nil?
       Star.create(:user_id => current_user.id, :snipet_id => @snipet.id)
     else
