@@ -10,12 +10,13 @@ describe Star do
   end
 
   context "validation" do
-    it "associated user must exist" do
-      pending
-    end
-    it "associated snippet must exist" do
-      pending
-    end
+    # I guess it's covered by belong_to matcher
+    # it "associated user must exist" do
+      # pending
+    # end
+    # it "associated snippet must exist" do
+      # pending
+    # end
 
     it {should belong_to(:user)}
     it {should belong_to(:snipet)}

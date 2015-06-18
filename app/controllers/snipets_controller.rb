@@ -1,6 +1,6 @@
 class SnipetsController < ApplicationController
   # FIXME: check if set_snipet has to be executed before show
-  before_action :set_snipet, only: [:show, :edit, :update, :destroy]
+  before_action :set_snipet, only: [:show, :edit, :update, :destroy, :give_snippet_a_star]
   before_action :authenticate_user!, except: [:index, :show]
 
   # GET /snipets
@@ -59,6 +59,17 @@ class SnipetsController < ApplicationController
   def destroy
     @snipet.destroy
     redirect_to snipets_url, notice: 'Snipet was successfully destroyed.' 
+  end
+
+  def give_snippet_a_star
+    star = Star.where(:user_id => current_user.id, :snipet_id => @snipet.id)
+    byebug()
+    if star.nil?
+      Star.create(:user_id => current_user.id, :snipet_id => @snipet.id)
+    else
+      @snipet.user.destroy(star)
+    end
+    head :ok
   end
 
   private

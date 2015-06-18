@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   root 'snipets#index'
 
   get 'users/:id/snipets' => 'snipets#my_snipets', :as => :my_snipets
+  put 'snipets/:id/star' => 'snipets#give_snippet_a_star', :as => :give_snippet_a_star
 
   post 'save_output' => 'snipets#save_execution_output'
   # Example of regular route:
