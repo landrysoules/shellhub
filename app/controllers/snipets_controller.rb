@@ -67,7 +67,7 @@ class SnipetsController < ApplicationController
     if star.nil?
       Star.create(:user_id => current_user.id, :snipet_id => @snipet.id)
     else
-      @snipet.user.destroy(star)
+      star.destroy()
     end
     head :ok
   end
