@@ -1,0 +1,3 @@
+class SnipetsController < ApplicationController
+
+end
