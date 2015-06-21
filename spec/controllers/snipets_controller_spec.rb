@@ -3,7 +3,7 @@ require 'rails_helper'
 describe SnipetsController do
 
   let(:current_user){build_stubbed(:user)}
-  let(:all_snippets){all_snippets = build_list(:snipet, 10)}
+  let(:all_snippets){build_list(:snipet, 10)}
   let(:generic_snippet){build_stubbed(:snipet)}
 
   before do
@@ -110,17 +110,24 @@ describe SnipetsController do
     end
   end
 
+  describe "GET #star" do
+    let(:star){build_stubbed(:star)}
+    it "call snipet#toggle_star" do
+      expect(generic_snippet).to receive(:toggle_snippet)
+    end
+  end
+
   describe "PUT #give_snippet_a_star" do
     let(:star)do
       build(:star)
     end
     context "I didn't give the snippet a star yet" do
       before do
-        expect(Star).to receive(:where).with(any_args).and_return(nil)
+        expect(Star).to receive(:where).and_return(nil)
         expect(put :give_snippet_a_star, :id => generic_snippet.id).to have_http_status(:ok)
       end
       it "create a new star" do
-        allow(Star).to receive(:create)
+        expect(Star).to receive(:create)
       end
       it "increment stars counter for this snippet" do
       end

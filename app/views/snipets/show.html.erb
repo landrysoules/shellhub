@@ -30,7 +30,8 @@
               :method => 'delete',
               :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
               :class => 'btn btn-danger' if  user_signed_in? && current_user.id == @snipet.user_id%>
-           <%#<% if  user_signed_in? && current_user.id == @snipet.user_id %>    <button class="btn btn-success" id="launchSnipet">execute command</button><%# end %>
+       <%#<% if  user_signed_in? && current_user.id == @snipet.user_id %>    <button class="btn btn-success" id="launchSnipet">execute command</button><%# end %>
+           <%= link_to "star", star_path, :id => "star_icon", :method => :PUT, :remote => true %>
 </div>
 </div>
 <script>
