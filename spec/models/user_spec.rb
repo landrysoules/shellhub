@@ -31,4 +31,8 @@ describe User, type: :model do
       expect(user).not_to be_valid
     end
   end
+
+  context "rating system" do
+    it{should have_many(:snipets)}
+  end
 end
