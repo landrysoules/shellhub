@@ -11,6 +11,9 @@ Rails.application.routes.draw do
   put 'snipets/:id/star' => 'snipets#star', :as => :star
 
   post 'save_output' => 'snipets#save_execution_output'
+
+  resources :comments
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 
