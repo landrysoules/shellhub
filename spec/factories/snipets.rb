@@ -10,8 +10,5 @@ FactoryGirl.define do
       content "a"
     end
 
-    factory :snipet_starred do
-      star true
-    end
   end
 end

@@ -1,6 +1,6 @@
 class SnipetsController < ApplicationController
   # FIXME: check if set_snipet has to be executed before show
-  before_action :set_snipet, only: [:show, :edit, :update, :destroy, :give_snippet_a_star]
+  before_action :set_snipet, only: [:show, :edit, :update, :destroy, :star]
   before_action :authenticate_user!, except: [:index, :show]
 
   # GET /snipets
@@ -61,23 +61,19 @@ class SnipetsController < ApplicationController
     redirect_to snipets_url, notice: 'Snipet was successfully destroyed.' 
   end
 
-  def give_snippet_a_star
-    star = Star.where(:user_id => current_user.id, :snipet_id => @snipet.id)
-    if star.nil?
-      Star.create(:user_id => current_user.id, :snipet_id => @snipet.id)
-    else
-      @snipet.user.destroy(star)
-    end
+  def star
+    @snipet.toggle_star(current_user)
     head :ok
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_snipet
-      @snipet = Snipet.find(params[:id]) || nil
-      rescue ActiveRecord::RecordNotFound
+      @snipet = Snipet.find_by_id(params[:id])
+      unless @snipet
         flash[:alert] = "No snippet found with the id " + params[:id]
         redirect_to :action => :index
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
