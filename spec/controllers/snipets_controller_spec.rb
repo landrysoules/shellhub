@@ -8,7 +8,7 @@ describe SnipetsController do
 
   before do
     sign_in current_user
-    allow(Snipet).to receive(:find).and_return(generic_snippet)
+    allow(Snipet).to receive(:find_by_id).and_return(generic_snippet)
   end
   
   describe "GET #index" do
@@ -36,7 +36,7 @@ describe SnipetsController do
       end
     end
     context "the snippet doesn't exists" do
-      before{expect(Snipet).to receive(:find).and_raise(ActiveRecord::RecordNotFound)}
+      before{expect(Snipet).to receive(:find_by_id).and_return(nil)}
       it "redirect to index template" do
         expect(get :show, :id => 99).to redirect_to(:action => :index)
       end
@@ -57,7 +57,7 @@ describe SnipetsController do
       end
      end
     context "the snippet doesn't exists" do
-      before{expect(Snipet).to receive(:find).and_raise(ActiveRecord::RecordNotFound)}
+      before{expect(Snipet).to receive(:find_by_id).and_return(nil)}
       it "redirect to index template" do
         expect(get :edit, :id => 99).to redirect_to(:action => :index)
       end
@@ -103,46 +103,20 @@ describe SnipetsController do
       end
     end
     context "the snippet doesn't exist" do
-      before{expect(Snipet).to receive(:find).and_raise(ActiveRecord::RecordNotFound)}
+      before{expect(Snipet).to receive(:find_by_id).and_return(nil)}
       it "redirect to all snippets" do
         expect(delete :destroy, :id => generic_snippet.id).to redirect_to(:action => :index)
       end
     end
   end
 
-  describe "GET #star" do
-    let(:star){build_stubbed(:star)}
+  describe "PUT #star" do
+    before{expect(Snipet).to receive(:find_by_id).and_return(generic_snippet)}
     it "call snipet#toggle_star" do
-      expect(generic_snippet).to receive(:toggle_snippet)
+      expect(generic_snippet).to receive(:toggle_star)
+      put :star, :id => generic_snippet.id
+      expect(response).to have_http_status(200)
     end
   end
 
-  describe "PUT #give_snippet_a_star" do
-    let(:star)do
-      build(:star)
-    end
-    context "I didn't give the snippet a star yet" do
-      before do
-        expect(Star).to receive(:where).and_return(nil)
-        expect(put :give_snippet_a_star, :id => generic_snippet.id).to have_http_status(:ok)
-      end
-      it "create a new star" do
-        expect(Star).to receive(:create)
-      end
-      it "increment stars counter for this snippet" do
-      end
-    end
-    context "I already gave the snippet a star" do
-      before do
-        
-        expect(Star).to receive(:where).and_return(star)
-        expect(put :give_snippet_a_star, :id => generic_snippet.id).to have_http_status(:ok)
-      end
-      it "remove the star" do
-        allow(star).to receive(:destroy).and_return(nil)
-      end
-      it "decrease stars counter for this snippet" do
-      end
-    end
-  end
 end

@@ -61,16 +61,6 @@ class SnipetsController < ApplicationController
     redirect_to snipets_url, notice: 'Snipet was successfully destroyed.' 
   end
 
-  def give_snippet_a_star
-    star = Star.where(:user_id => current_user.id, :snipet_id => @snipet.id)
-    if star.nil?
-      Star.create(:user_id => current_user.id, :snipet_id => @snipet.id)
-    else
-      star.destroy()
-    end
-    head :ok
-  end
-
   def star
     @snipet.toggle_star(current_user)
     head :ok
@@ -79,10 +69,11 @@ class SnipetsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_snipet
-      @snipet = Snipet.find(params[:id]) || nil
-      rescue ActiveRecord::RecordNotFound
+      @snipet = Snipet.find_by_id(params[:id])
+      unless @snipet
         flash[:alert] = "No snippet found with the id " + params[:id]
         redirect_to :action => :index
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
