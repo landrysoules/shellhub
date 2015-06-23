@@ -7,7 +7,7 @@ angular.module('shellhub', [])
         $scope.giveSnippetAStar=function(snippetId){
             console.debug("pop " + snippetId);
             $http.put('/snipets/' + snippetId + '/star.json', {}).success(function(data){
-            $scope.pop = data;
+            $scope.starred = data.starred;
             });
             //$http.put('/snipets/' + snippetId + '/star.json',function(success){
             //    $scope.pop = success.data;

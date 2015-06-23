@@ -62,9 +62,10 @@ class SnipetsController < ApplicationController
   end
 
   def star
-    @snipet.toggle_star(current_user)
+    starred = {"starred" => @snipet.toggle_star(current_user)}
     # head :ok
-    render json: @snipet
+    # render json: @snipet
+    render json: starred
   end
 
   private

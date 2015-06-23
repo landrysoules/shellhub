@@ -9,8 +9,10 @@ class Snipet < ActiveRecord::Base
     star = stars.find_by_user_id(user.id)
     if star
       star.destroy
+      return false
     else
       stars.create(:user_id => user.id)
+      return true
     end
   end
 end

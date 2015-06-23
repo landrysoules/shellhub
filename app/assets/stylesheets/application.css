@@ -24,4 +24,5 @@
 #star_icon{
     color: #F2D91F;
     cursor: pointer;
+    text-decoration: none;
 }

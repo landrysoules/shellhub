@@ -1,6 +1,6 @@
 <%- model_class = Snipet -%>
 <div class="page-header col-md-4 col-md-offset-4">
-    <h1><%=t '.title', :default => model_class.model_name.human.titleize %><span ng-controller="StarController"><span id="star_icon" ng-click="giveSnippetAStar(<%= @snipet.id %>)" class="glyphicon glyphicon-star pull-right" aria-hidden="true"></span></span></h1>
+    <h1><%=t '.title', :default => model_class.model_name.human.titleize %><span ng-controller="StarController"><span><a id="star_icon" href="#" ng-click="giveSnippetAStar(<%= @snipet.id %>)" class="glyphicon pull-right" ng-class="starred ? 'glyphicon-star' : 'glyphicon-star-empty'" aria-hidden="true"></a></span></span></h1>
 </div>
     <div class="row">
         <div class="col-md-4 col-md-offset-4">
@@ -29,7 +29,6 @@
                 :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
                 :class => 'btn btn-danger' if  user_signed_in? && current_user.id == @snipet.user_id%>
             <%#<% if  user_signed_in? && current_user.id == @snipet.user_id %>    <button class="btn btn-success" id="launchSnipet">execute command</button><%# end %>
-           <%= link_to "star", star_path(@snipet.id), :id => "star_icon"%>
 <div ng-controller="CommentController">
     </div>
 </div>
