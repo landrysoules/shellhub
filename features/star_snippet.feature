@@ -1,4 +1,3 @@
-@star
 Feature: Starring snippets
   In order to give snippets rating
   As an authenticated user
@@ -6,7 +5,9 @@ Feature: Starring snippets
 
   Background:
     Given I am authenticated
+    And there is at least one snippet in the system
 
+  @javascript
   Scenario: Giving a snippet a star
     Given I am on a snippet page
     When I click the star icon

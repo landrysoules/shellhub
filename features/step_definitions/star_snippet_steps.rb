@@ -2,6 +2,10 @@ Given(/^I am on a snippet page$/) do
   visit snipet_path(@snippet.id)
 end
 
+Given(/^there is at least one snippet in the system$/) do
+  @snippet = FactoryGirl.create(:snipet)
+end
+
 When(/^I click the star icon$/) do
   click_link "star_icon"
 end
@@ -16,7 +20,7 @@ Then(/^I should see a "(.*?)" message$/) do |message_type|
 end
 
 Then(/^the stars counter for this snippet should increment$/) do
-  pending # express the regexp above with the code you wish you had
+  expect(find("#star_counter").text).to eq("1")
 end
 
 Then(/^the star icon should become yellow$/) do
