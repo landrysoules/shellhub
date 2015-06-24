@@ -26,3 +26,8 @@
     cursor: pointer;
     text-decoration: none;
 }
+
+
+.no-action{
+    cursor: default;
+}

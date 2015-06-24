@@ -119,4 +119,16 @@ describe SnipetsController do
     end
   end
 
+  describe "GET #star_info" do
+    before{expect(Snipet).to receive(:find_by_id).and_return(generic_snippet)}
+    it "call snipet#toggle_star" do
+      stars = double("stars")
+      expect(stars).to receive(:where).and_return([generic_snippet])
+      expect(stars).to receive(:count).and_return(2)
+      expect(generic_snippet).to receive(:stars).twice.and_return(stars)
+      get :star_info, :id => generic_snippet.id
+      expect(response).to have_http_status(200)
+    end
+  end
+
 end

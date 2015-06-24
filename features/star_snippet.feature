@@ -11,16 +11,15 @@ Feature: Starring snippets
   Scenario: Giving a snippet a star
     Given I am on a snippet page
     When I click the star icon
-    Then I should see a "addition" message
-    And the stars counter for this snippet should increment
+    Then the stars counter for this snippet should increment
     And the star icon should become yellow
 
+  @javascript
   Scenario: Removing a star from a snippet
     Given I am on a snippet page
     And I already gave this snippet a star
-    When click the star icon
-    Then I should see a "deletion" message
-    And the stars counter for this snippet should decrease
+    When I click the star icon
+    Then the stars counter for this snippet should decrease
     And the star icon should become grey
 
   Scenario: Watching my starred snippets

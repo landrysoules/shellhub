@@ -8,15 +8,7 @@ end
 
 When(/^I click the star icon$/) do
   click_link "star_icon"
-end
-
-Then(/^I should see a "(.*?)" message$/) do |message_type|
-  case message_type
-  when "increment"
-    expect(page).to have_content("You have starred this snippet")
-  when "decrease"
-    expect(page).to have_content("You have un-starred this snippet")
-  end
+  #star
 end
 
 Then(/^the stars counter for this snippet should increment$/) do
@@ -24,23 +16,20 @@ Then(/^the stars counter for this snippet should increment$/) do
 end
 
 Then(/^the star icon should become yellow$/) do
-  pending # express the regexp above with the code you wish you had
+  expect(page).to have_css(".glyphicon.pull-right.glyphicon-star")
 end
 
 Given(/^I already gave this snippet a star$/) do
-  pending # express the regexp above with the code you wish you had
-end
-
-When(/^click the star icon$/) do
-  pending # express the regexp above with the code you wish you had
+  click_link "star_icon"
 end
 
 Then(/^the stars counter for this snippet should decrease$/) do
-  pending # express the regexp above with the code you wish you had
+  #puts save_page
+  expect(find("#star_counter").text).to eq("")
 end
 
 Then(/^the star icon should become grey$/) do
-  pending # express the regexp above with the code you wish you had
+  expect(page).to have_css(".glyphicon.pull-right.glyphicon-star-empty")
 end
 
 Given(/^I am anywhere in the site$/) do

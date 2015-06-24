@@ -1,7 +1,7 @@
 class SnipetsController < ApplicationController
   # FIXME: check if set_snipet has to be executed before show
-  before_action :set_snipet, only: [:show, :edit, :update, :destroy, :star]
-  before_action :authenticate_user!, except: [:index, :show]
+  before_action :set_snipet, only: [:show, :edit, :update, :destroy, :star, :star_info]
+  before_action :authenticate_user!, except: [:index, :show, :star_info]
 
   # GET /snipets
   def index
@@ -62,9 +62,21 @@ class SnipetsController < ApplicationController
   end
 
   def star
-    starred = {"starred" => @snipet.toggle_star(current_user)}
-    # head :ok
-    # render json: @snipet
+    star_toggle = @snipet.toggle_star(current_user)
+    star_count = @snipet.stars.count
+    starred = {"starred" => star_toggle, "star_count" => star_count}
+    render json: starred
+  end
+
+  def star_info
+    is_starred = false
+    auth_user = false
+    if current_user
+        auth_user = true
+        is_starred = !@snipet.stars.where(:user_id => current_user.id).empty?
+    end
+    star_count = @snipet.stars.count
+    starred = {"starred" => is_starred, "star_count" => star_count, "auth_user" => auth_user}
     render json: starred
   end
 

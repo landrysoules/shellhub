@@ -9,6 +9,7 @@ Rails.application.routes.draw do
 
   get 'users/:id/snipets' => 'snipets#my_snipets', :as => :my_snipets
   put 'snipets/:id/star' => 'snipets#star', :as => :star
+  get 'snipets/:id/star_info' => 'snipets#star_info', :as => :star_info
 
   post 'save_output' => 'snipets#save_execution_output'
 
