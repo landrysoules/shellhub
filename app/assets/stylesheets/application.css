@@ -12,10 +12,22 @@
  *
  *= require_tree .
  *= require_self
+ *= require bootstrap
  */
 
 .terminal{
     background-color: black;
     color: green;
     font-family: "Lucida Console", Monaco, monospace;
+}
+
+#star_icon{
+    color: #F2D91F;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+
+.no-action{
+    cursor: default;
 }

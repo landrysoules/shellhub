@@ -1,4 +1,5 @@
 require 'rails_helper'
+require_relative '../support/shared'
 
 describe SnipetsController do
 
@@ -115,8 +116,43 @@ describe SnipetsController do
     it "call snipet#toggle_star" do
       expect(generic_snippet).to receive(:toggle_star)
       put :star, :id => generic_snippet.id
+    end
+    it_behaves_like "the snippet doesn't have a star yet"
+    #context "the snippet doesn't have a star yet" do
+      #it "return unstarred JSON response" do
+        #put :star, :id => generic_snippet.id
+        #json_response = JSON.parse(response.body)
+        #expect(json_response["starred"]).to be_truthy
+      #end
+    #end
+    it_behaves_like "the snippet already has a star"
+      #it "return starred JSON response" do
+        #expect(generic_snippet).to receive(:toggle_star).and_return(false)
+        #put :star, :id => generic_snippet.id
+        #json_response = JSON.parse(response.body)
+        #expect(json_response["starred"]).to be_falsy
+      #end
+    #end
+    it "return a OK status" do
+      allow(generic_snippet).to receive(:toggle_star)
+      put :star, :id => generic_snippet.id
       expect(response).to have_http_status(200)
     end
+
+  end
+
+  describe "GET #star_info" do
+    before{expect(Snipet).to receive(:find_by_id).and_return(generic_snippet)}
+    it "call snipet#toggle_star" do
+      stars = double("stars")
+      expect(stars).to receive(:where).and_return([generic_snippet])
+      expect(stars).to receive(:count).and_return(2)
+      expect(generic_snippet).to receive(:stars).twice.and_return(stars)
+      get :star_info, :id => generic_snippet.id
+      expect(response).to have_http_status(200)
+    end
+    it_behaves_like "the snippet doesn't have a star yet"
+    it_behaves_like "the snippet already has a star"
   end
 
 end
