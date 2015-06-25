@@ -5,6 +5,6 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
   has_many :snipets
   has_many :stars
-  has_many :snipets, :through => :stars
+  has_many :starred_snipets, :through => :stars, :source => :snipet
   validates_presence_of :username
 end

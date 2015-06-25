@@ -24,5 +24,5 @@ Feature: Starring snippets
 
   Scenario: Watching my starred snippets
     Given I am anywhere in the site
-    When I click on my starred snippets
+    When I click on my starred snippets link
     Then I should see all the snippets I have given a star

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'snipets/starred' => 'snipets#my_starred_snipets', :as => :my_starred_snipets
   resources :snipets
   devise_for :users
   # The priority is based upon order of creation: first created -> highest priority.

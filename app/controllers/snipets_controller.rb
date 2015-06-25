@@ -1,5 +1,4 @@
 class SnipetsController < ApplicationController
-  # FIXME: check if set_snipet has to be executed before show
   before_action :set_snipet, only: [:show, :edit, :update, :destroy, :star, :star_info]
   before_action :authenticate_user!, except: [:index, :show, :star_info]
 
@@ -10,6 +9,12 @@ class SnipetsController < ApplicationController
 
   def my_snipets
     @snipets = Snipet.where(user_id: current_user.id)
+    render "index"
+  end
+
+  def my_starred_snipets
+    @snipets = current_user.starred_snipets
+    @header = "Starred snippets"
     render "index"
   end
 

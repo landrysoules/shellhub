@@ -33,14 +33,14 @@ Then(/^the star icon should become grey$/) do
 end
 
 Given(/^I am anywhere in the site$/) do
-  pending # express the regexp above with the code you wish you had
+  # Nothing here: the given is just used to document the scenario
 end
 
-When(/^I click on my starred snippets$/) do
-  pending # express the regexp above with the code you wish you had
+When(/^I click on my starred snippets link$/) do
+  visit my_starred_snipets_path
 end
 
 Then(/^I should see all the snippets I have given a star$/) do
-  pending # express the regexp above with the code you wish you had
+  expect(page).to have_content("Starred snippets")
 end
 
